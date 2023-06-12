@@ -6,7 +6,7 @@ var Layout = require("../views/Layout")
 
 var SST = {
   setError: function(error) {
-    Layout.setError(error)
+    Layout.error = error
   },
   getCookie: function (name) {
     const value = `; ${document.cookie}`;
@@ -87,10 +87,13 @@ var SST = {
           Session.current.suspension_count == 2 ? SST.update.process_double_json(update) :
                                                   SST.update.process_single_json(update);
       })
+      .catch((error) => {
+        SST.setError('Invalid range!')
+      })
     },
     fft: function(p, u) {
       p.select_one("ds_fft").data = u.data;
-      p.select_one("b_fft").glyph.width = u.width;
+      p.select_one("b_fft").glyph.width = 4.9 / u.data.freqs.length
     },
     thist: function(p, u) {
       p.select_one("ds_hist").data = u.data;
